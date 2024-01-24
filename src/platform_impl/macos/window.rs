@@ -1280,6 +1280,10 @@ impl WinitWindow {
         util::to_back(self);
     }
 
+    pub fn active_cur_window(&self) {
+        util::active_cur_window(self);
+    }
+
 }
 
 impl WindowExtMacOS for WinitWindow {

@@ -223,3 +223,6 @@ pub(crate) fn to_back(window: &NSWindow) {
         window.orderBack(None);
     });
 }
+
+pub(crate) fn active_cur_window(window: &NSWindow) {
+}

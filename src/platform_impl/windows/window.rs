@@ -871,6 +871,27 @@ impl Window {
             }
         });
     }
+
+    #[inline]
+    pub fn active_cur_window(&self) {
+        self.thread_executor.execute_in_thread(move || {
+            unsafe {
+                SetWindowPos(
+                    unsafe { GetForegroundWindow() },
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    SWP_NOMOVE | SWP_NOSIZE,
+                );
+                SetForegroundWindow(
+                    unsafe { GetForegroundWindow() }
+                );
+            }
+        });
+    }
+
 }
 
 impl Drop for Window {

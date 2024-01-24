@@ -1163,6 +1163,11 @@ impl Window {
     pub fn to_back(&self) {
         self.window.to_back();
     }
+
+    pub fn active_cur_window(&self) {
+        self.window.active_cur_window();
+    }
+
 }
 
 /// Cursor functions.
