@@ -1155,6 +1155,14 @@ impl Window {
     pub fn title(&self) -> String {
         self.window.title()
     }
+
+    pub fn to_front(&self) {
+        self.window.to_front();
+    }
+
+    pub fn to_back(&self) {
+        self.window.to_back();
+    }
 }
 
 /// Cursor functions.

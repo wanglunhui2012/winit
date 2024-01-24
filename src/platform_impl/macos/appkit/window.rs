@@ -222,6 +222,13 @@ extern_methods!(
 
         #[sel(addChildWindow:ordered:)]
         pub unsafe fn addChildWindow(&self, child: &NSWindow, ordered: NSWindowOrderingMode);
+
+        #[sel(orderFrontRegardless)]
+        pub fn orderFrontRegardless(&self);
+
+        #[sel(orderBack:)]
+        pub fn orderBack(&self, sender: Option<&Object>);
+
     }
 );
 

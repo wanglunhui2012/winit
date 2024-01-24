@@ -46,7 +46,7 @@ use windows_sys::Win32::{
             SetWindowPos, SetWindowTextW, CS_HREDRAW, CS_VREDRAW, CW_USEDEFAULT, FLASHWINFO,
             FLASHW_ALL, FLASHW_STOP, FLASHW_TIMERNOFG, FLASHW_TRAY, GWLP_HINSTANCE, HTCAPTION,
             NID_READY, PM_NOREMOVE, SM_DIGITIZER, SWP_ASYNCWINDOWPOS, SWP_NOACTIVATE, SWP_NOSIZE,
-            SWP_NOZORDER, WDA_EXCLUDEFROMCAPTURE, WDA_NONE, WM_NCLBUTTONDOWN, WNDCLASSEXW,
+            SWP_NOZORDER, WDA_EXCLUDEFROMCAPTURE, WDA_NONE, WM_NCLBUTTONDOWN, WNDCLASSEXW, SWP_NOMOVE
         },
     },
 };
@@ -832,6 +832,44 @@ impl Window {
                 },
             )
         };
+    }
+
+    #[inline]
+    pub fn to_front(&self) {
+        let window = self.window.clone();
+
+        self.thread_executor.execute_in_thread(move || {
+            unsafe {
+                SetWindowPos(
+                    window.0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE,
+                );
+            }
+        });
+    }
+
+    #[inline]
+    pub fn to_back(&self) {
+        let window = self.window.clone();
+
+        self.thread_executor.execute_in_thread(move || {
+            unsafe {
+                SetWindowPos(
+                    window.0,
+                    1,
+                    0,
+                    0,
+                    0,
+                    0,
+                    SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE,
+                );
+            }
+        });
     }
 }
 

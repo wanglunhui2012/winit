@@ -209,3 +209,17 @@ pub(crate) fn set_ime_position_sync(window: &WinitWindow, logical_spot: LogicalP
         unsafe { Id::from_shared(window.view()) }.set_ime_position(logical_spot);
     });
 }
+
+pub(crate) fn to_front(window: &NSWindow) {
+    let window = MainThreadSafe(window);
+    run_on_main(move || {
+        window.orderFrontRegardless();
+    });
+}
+
+pub(crate) fn to_back(window: &NSWindow) {
+    let window = MainThreadSafe(window);
+    run_on_main(move || {
+        window.orderBack(None);
+    });
+}

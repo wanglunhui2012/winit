@@ -1271,6 +1271,15 @@ impl WinitWindow {
     pub fn title(&self) -> String {
         self.title_().to_string()
     }
+
+    pub fn to_front(&self) {
+        util::to_front(self);
+    }
+
+    pub fn to_back(&self) {
+        util::to_back(self);
+    }
+
 }
 
 impl WindowExtMacOS for WinitWindow {
