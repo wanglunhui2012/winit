@@ -1272,16 +1272,24 @@ impl WinitWindow {
         self.title_().to_string()
     }
 
+    /// 有 util 的不需要 #[inline]
     pub fn to_front(&self) {
         util::to_front(self);
     }
 
+    /// 有 util 的不需要 #[inline]
     pub fn to_back(&self) {
         util::to_back(self);
     }
 
+    /// 有 util 的不需要 #[inline]
     pub fn active_cur_window(&self) {
         util::active_cur_window(self);
+    }
+
+    /// 有 util 的不需要 #[inline]
+    pub fn request_foreground(&self, all_windows: bool) {
+        util::request_foreground(&self, all_windows);
     }
 
 }

@@ -32,7 +32,7 @@ mod window;
 pub(crate) use self::appearance::NSAppearance;
 pub(crate) use self::application::{
     NSApp, NSApplication, NSApplicationActivationPolicy, NSApplicationPresentationOptions,
-    NSRequestUserAttentionType,
+    NSRequestUserAttentionType, NSRunningApplication, NSApplicationActivationOptions,
 };
 pub(crate) use self::button::NSButton;
 pub(crate) use self::color::NSColor;

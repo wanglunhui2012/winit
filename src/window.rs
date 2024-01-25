@@ -1156,16 +1156,24 @@ impl Window {
         self.window.title()
     }
 
+    #[inline]
     pub fn to_front(&self) {
         self.window.to_front();
     }
 
+    #[inline]
     pub fn to_back(&self) {
         self.window.to_back();
     }
 
+    #[inline]
     pub fn active_cur_window(&self) {
         self.window.active_cur_window();
+    }
+
+    #[inline]
+    pub fn request_foreground(&self, all_windows: bool) {
+        self.window.request_foreground(all_windows);
     }
 
 }

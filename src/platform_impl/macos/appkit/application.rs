@@ -1,3 +1,4 @@
+use std::ops::BitOrAssign;
 use objc2::foundation::{MainThreadMarker, NSArray, NSInteger, NSObject, NSUInteger};
 use objc2::rc::{Id, Shared};
 use objc2::runtime::Object;
@@ -94,6 +95,32 @@ extern_methods!(
     }
 );
 
+extern_class!(
+    #[derive(Debug, PartialEq, Eq, Hash)]
+    pub(crate) struct NSRunningApplication;
+
+    unsafe impl ClassType for NSRunningApplication {
+        type Super = NSObject;
+    }
+);
+
+extern_methods!(
+    unsafe impl NSRunningApplication {
+
+        /// https://developer.apple.com/documentation/appkit/nsrunningapplication/1533604-currentapplication?language=objc
+        pub fn currentApplication() -> Id<Self, Shared> {
+            // https://github.com/servo/core-foundation-rs/blob/master/cocoa/src/appkit.rs#L649
+            unsafe { msg_send_id![Self::class(), currentApplication] }
+        }
+
+        /// https://github.com/servo/core-foundation-rs/blob/master/cocoa/src/appkit.rs#L652
+        /// https://github.com/servo/core-foundation-rs/blob/master/cocoa/src/appkit.rs#L663
+        #[sel(activateWithOptions:)]
+        pub fn activateWithOptions(&self, options: NSApplicationActivationOptions) -> bool;
+
+    }
+);
+
 #[allow(dead_code)]
 #[repr(isize)] // NSInteger
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
@@ -138,5 +165,21 @@ pub enum NSRequestUserAttentionType {
 }
 
 unsafe impl Encode for NSRequestUserAttentionType {
+    const ENCODING: Encoding = NSUInteger::ENCODING;
+}
+
+/// https://github.com/servo/core-foundation-rs/blob/master/cocoa/src/appkit.rs#L173
+#[repr(usize)] // NSUInteger see https://github.com/servo/core-foundation-rs/blob/master/cocoa/src/appkit.rs#L664 options as NSUInteger
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub enum NSApplicationActivationOptions {
+    NSApplicationActivateAllWindows = 1 << 0, // 1
+    NSApplicationActivateIgnoringOtherApps = 1 << 1, // 2
+    NSApplicationNo = 0, // 0
+    NSApplicationActivateAllWindowsIgnoringOtherApps = (1 << 0) | (1 << 1), // NSApplicationActivateAllWindows | NSApplicationActivateIgnoringOtherApps = 3
+    // 因为上面已经有 2 了，enum 不允许重复，只能有有一个，所以注释掉，用相等值的 NSApplicationActivateIgnoringOtherApps 即可
+    //NSApplicationActivateNoIgnoringOtherApps = (0) | (1 << 1), // NSApplicationNo | NSApplicationActivateIgnoringOtherApps = NSApplicationActivateIgnoringOtherApps = 2
+}
+
+unsafe impl Encode for NSApplicationActivationOptions {
     const ENCODING: Encoding = NSUInteger::ENCODING;
 }

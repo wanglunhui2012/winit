@@ -12,6 +12,7 @@ use crate::{
         window::WinitWindow,
     },
 };
+use crate::platform_impl::platform::appkit::{NSApplicationActivationOptions, NSRunningApplication};
 
 // Unsafe wrapper type that allows us to dispatch things that aren't Send.
 // This should *only* be used to dispatch to the main queue.
@@ -225,4 +226,23 @@ pub(crate) fn to_back(window: &NSWindow) {
 }
 
 pub(crate) fn active_cur_window(window: &NSWindow) {
+    // macos 端无实现
+    unreachable!();
+}
+
+/// 改方法体其实与 NSWindow 无关，只是需要使用 run_on_main，但 run_on_main 是跨平台的实现，所以需要写在这里
+pub(crate) fn request_foreground(_: &NSWindow, all_windows: bool) {
+    // https://github.com/openjdk/jdk17/blob/master/src/java.desktop/macosx/native/libawt_lwawt/awt/ApplicationDelegate.m#L730
+    run_on_main(move || {
+        let run_app = NSRunningApplication::currentApplication();
+        let run_app = MainThreadSafe(run_app);
+
+        let options = if all_windows{
+            NSApplicationActivationOptions::NSApplicationActivateAllWindowsIgnoringOtherApps
+        } else {
+            NSApplicationActivationOptions::NSApplicationActivateIgnoringOtherApps
+        };
+
+        let _ = run_app.activateWithOptions(options);
+    });
 }
