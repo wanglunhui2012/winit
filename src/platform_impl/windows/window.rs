@@ -9,7 +9,6 @@ use std::{
     io, mem, panic, ptr,
     sync::{mpsc::channel, Arc, Mutex, MutexGuard},
 };
-use std::intrinsics::mir::Unreachable;
 
 use windows_sys::Win32::{
     Foundation::{
